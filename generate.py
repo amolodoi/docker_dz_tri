@@ -1,0 +1,28 @@
+import csv
+import random
+import os
+import sys
+
+NUM_ROWS = 50
+
+COLUMNS = ["Name", "Age", "Weight", "City"]
+
+def generate_row():
+    return {
+        "Name": random.choice(["Alice", "Bob", "Charlie", "Diana"]),
+        "Age": random.randint(18, 65),
+        "Weight": round(random.uniform(45.0, 120.0), 1),
+        "City": random.choice(["Moscow", "SPB", "Kazan", "Novosibirsk"]),
+    }
+
+OUTPUT_DIR = sys.argv[1] if len(sys.argv) > 1 else "/data"
+OUTPUT_FILE = os.path.join(OUTPUT_DIR, "data.csv")
+
+os.makedirs(OUTPUT_DIR, exist_ok=True)
+
+rows = [generate_row() for _ in range(NUM_ROWS)]
+
+with open(OUTPUT_FILE, "w", newline="", encoding="utf-8") as f:
+    writer = csv.DictWriter(f, fieldnames=COLUMNS)
+    writer.writeheader()
+    writer.writerows(rows)
